@@ -4,18 +4,21 @@ import CurrencyConverter from "./components/CurrencyConverter";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {instance} from "./api/api";
+import Footer from "./components/Footer";
 
 
 function App() {
-    const [amount1h, setAmount1h] = useState(1);
-    const [amount2h, setAmount2h] = useState(1);
-    const [amount3h, setAmount3h] = useState(1);
-    const [currency2h, setCurrency2h] = useState('EUR');
-
+    //header
+    const [amountUSD, setAmountUSD] = useState(1);
+    const [amountH, setAmountH] = useState(1);
+    const [amountEUR, setAmountEUR] = useState(1);
+    const [currencyH, setCurrencyH] = useState('EUR');
+    //content
     const [amount1, setAmount1] = useState(1);
     const [amount2, setAmount2] = useState(1);
-    const [currency1, setCurrency1] = useState('USD');
-    const [currency2, setCurrency2] = useState('EUR');
+    const [currency1, setCurrency1] = useState('BTC');
+    const [currency2, setCurrency2] = useState('CAD');
+
     const [rates, setRates] = useState([]);
 
     useEffect(() => {
@@ -31,10 +34,10 @@ function App() {
             function init() {
                 setAmount2(format(amount1 * rates[currency2] / rates[currency1]));
                 setAmount1(amount1);
-                setAmount2h(format(rates['UAH'] / rates[currency2h]));
-                setAmount1h(format(rates['UAH'] / rates["USD"]));
-                setAmount3h(format(rates['UAH'] / rates["EUR"]))
-                setCurrency2h(currency2h);
+                setAmountH(format(rates['UAH'] / rates[currencyH]));
+                setAmountUSD(format(rates['UAH'] / rates["USD"]));
+                setAmountEUR(format(rates['UAH'] / rates["EUR"]))
+                setCurrencyH(currencyH);
             }
             init();
         }
@@ -65,18 +68,18 @@ function App() {
         setAmount1(format(amount2 * rates[currency1] / rates[currency2]));
         setCurrency2(currency2);
     }
-////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////// HEADER FUNC
 
     function headerCurrencyChange(currency2h) {
-        setAmount2h(format(rates['UAH'] / rates[currency2h]));
-        setCurrency2h(currency2h);
+        setAmountH(format(rates['UAH'] / rates[currency2h]));
+        setCurrencyH(currency2h);
     }
 
     function updateAmount() {
-        setAmount3h(format(rates['UAH'] / rates["EUR"]));
-        setAmount1h(format(rates['UAH'] / rates["USD"]));
+        setAmountEUR(format(rates['UAH'] / rates['EUR']));
+        setAmountUSD(format(rates['UAH'] / rates['USD']));
+        console.log("new: "+amountUSD+", "+amountEUR)
     }
 
 
@@ -84,19 +87,19 @@ function App() {
         <div className="App">
             <Header
                 onCurrencyChange={headerCurrencyChange}
-                amount={amount2h}
-                amountUSD={amount1h}
-                amountEUR={amount3h}
+                amount={amountH}
+                amountUSD={amountUSD}
+                amountEUR={amountEUR}
                 updateAmount={updateAmount}
                 currencies={Object.keys(rates)}
-                currency={currency2h}/>
+                currency={currencyH}/>
             <CurrencyConverter
                 onAmountChange={[handleAmount1Change, handleAmount2Change]}
                 onCurrencyChange={[handleCurrency1Change, handleCurrency2Change]}
                 currencies={Object.keys(rates)}
                 amount={[amount1, amount2]}
-                currency={[currency1, currency2]}/>
-
+                currency={[currency1, currency2]}></CurrencyConverter>
+            <Footer/>
         </div>
     );
 }

@@ -2,6 +2,8 @@
   display: grid;
   grid-template-areas:
           "h"
-          "c";
-  grid-template-rows: 50px;
+          "c"
+          "f";
+  grid-template-rows: 1fr 5fr 1fr;
 }
+
